@@ -1,0 +1,28 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "CALIST PRO: Build",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/build.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "CALIST PRO: Verify",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"--input-type=module",
+				"-e",
+				"import { spawnSync } from 'node:child_process'; import { readFile } from 'node:fs/promises'; for (const file of ['scripts/build.mjs', 'scripts/site.js']) { const result = spawnSync(process.execPath, ['--check', file], { stdio: 'inherit' }); if (result.error) throw result.error; if (result.status !== 0) process.exit(result.status ?? 1); } await import('./scripts/build.mjs'); const html = await readFile('index.html', 'utf8'); for (const id of ['home', 'work', 'about', 'contact']) { if (!html.includes(`id=\"${id}\"`)) throw new Error(`Missing section #${id}`); } if ((html.match(/class=\"project\"/g) ?? []).length !== 9) throw new Error('Expected 9 portfolio projects'); console.log('Syntax checks and generated page structure passed.');"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}
