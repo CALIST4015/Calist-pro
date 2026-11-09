@@ -1,10 +1,12 @@
 import { access, cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { renderSocialLinks } from "./social-links.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const templatePath = resolve(root, "src/index.template.html");
 const componentNames = ["navbar", "hero", "about", "services", "portfolio", "contact", "footer"];
+const processPages = ["pre-production.html", "production.html", "post-production.html"];
 let html = await readFile(templatePath, "utf8");
 
 for (const name of componentNames) {
@@ -17,6 +19,11 @@ for (const name of componentNames) {
     const component = await readFile(componentPath, "utf8");
     html = html.replace(marker, component.trimEnd());
 }
+
+if (html.split("<!-- social-links -->").length !== 2) {
+    throw new Error("Expected exactly one social-links placeholder in the portfolio component.");
+}
+html = html.replace("<!-- social-links -->", renderSocialLinks());
 
 if (/<!-- component:[^>]+ -->/.test(html)) {
     throw new Error("The HTML template contains an unresolved component placeholder.");
@@ -37,74 +44,33 @@ for (const reference of localReferences) {
 await writeFile(resolve(root, "index.html"), html, "utf8");
 console.log(`Built index.html with ${componentNames.length} components and ${localReferences.length} local files checked.`);
 
-const galleryCategories = [
-    {
-        page: "videos.html",
-        links: [
-            { platform: "YouTube", url: "https://www.youtube.com/@your-channel", description: "Watch films, stories, and recent video projects." },
-            { platform: "Instagram", url: "https://www.instagram.com/your-username/", description: "Follow short-form video, reels, and behind-the-scenes updates." },
-            { platform: "TikTok", url: "https://www.tiktok.com/@your-username", description: "See quick edits and new video highlights." },
-        ],
-    },
-    {
-        page: "photography.html",
-        links: [
-            { platform: "Instagram", url: "https://www.instagram.com/your-username/", description: "Browse recent portraits, events, and image stories." },
-            { platform: "Facebook", url: "https://www.facebook.com/your-page/", description: "Follow photography projects and studio updates." },
-            { platform: "Flickr", url: "https://www.flickr.com/people/your-username/", description: "Explore curated photography collections." },
-        ],
-    },
-    {
-        page: "graphics.html",
-        links: [
-            { platform: "Behance", url: "https://www.behance.net/your-username", description: "Explore selected graphic design projects and case studies." },
-            { platform: "Instagram", url: "https://www.instagram.com/your-username/", description: "See new visual designs and creative updates." },
-            { platform: "Pinterest", url: "https://www.pinterest.com/your-username/", description: "Browse graphic design inspiration and project boards." },
-        ],
-    },
-    {
-        page: "motion-graphics.html",
-        links: [
-            { platform: "Instagram", url: "https://www.instagram.com/your-username/", description: "Watch motion work, reels, and creative process clips." },
-            { platform: "YouTube", url: "https://www.youtube.com/@your-channel", description: "See motion graphics projects and video showcases." },
-            { platform: "TikTok", url: "https://www.tiktok.com/@your-username", description: "Catch short motion design edits and highlights." },
-        ],
-    },
-];
+const galleryCategories = ["videos.html", "photography.html", "graphics.html", "motion-graphics.html"];
 
-const escapeHtml = (value) => value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-
-for (const category of galleryCategories) {
-    const cards = category.links.map(({ platform, url, description }) => `          <article class="social-portfolio-card">
-            <p class="social-portfolio-platform">${escapeHtml(platform)}</p>
-            <h2>Find CALIST PRO on ${escapeHtml(platform)}</h2>
-            <p>${escapeHtml(description)}</p>
-            <a class="button button-light" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
-              Visit ${escapeHtml(platform)} <span aria-hidden="true">↗</span>
-            </a>
-          </article>`).join("\n");
-    const pagePath = resolve(root, category.page);
+for (const pageName of galleryCategories) {
+    const pagePath = resolve(root, pageName);
     let page = await readFile(pagePath, "utf8");
-    const startMarker = "<!-- portfolio-items:start -->";
-    const endMarker = "<!-- portfolio-items:end -->";
-    const start = page.indexOf(startMarker);
-    const end = page.indexOf(endMarker, start + startMarker.length);
-
-    if (start < 0 || end < 0) {
-        throw new Error(`Missing gallery markers in ${category.page}.`);
+    const socialContainerStart = page.indexOf('<div class="category-social-links">');
+    const containerStart = page.indexOf('<div class="category-work-grid social-portfolio-grid">');
+    if (socialContainerStart >= 0) {
+        const containerEnd = page.indexOf("</div>", socialContainerStart);
+        if (containerEnd < 0) throw new Error(`Missing social links container end in ${pageName}.`);
+        page = `${page.slice(0, socialContainerStart)}<div class="category-social-links">\n${renderSocialLinks()}\n        </div>${page.slice(containerEnd + "</div>".length)}`;
+    } else {
+        const startMarker = "<!-- portfolio-items:start -->";
+        const endMarker = "<!-- portfolio-items:end -->";
+        const start = page.indexOf(startMarker, containerStart);
+        const end = page.indexOf(endMarker, start + startMarker.length);
+        const containerEnd = page.indexOf("</div>", end + endMarker.length);
+        if (containerStart < 0 || start < 0 || end < 0 || containerEnd < 0) {
+            throw new Error(`Missing gallery markers in ${pageName}.`);
+        }
+        page = `${page.slice(0, containerStart)}<div class="category-social-links">\n${renderSocialLinks()}\n        </div>${page.slice(containerEnd + "</div>".length)}`;
     }
 
-    page = `${page.slice(0, start + startMarker.length)}\n${cards}\n          ${page.slice(end)}`;
-    page = page.replace(/<p class="media-protection-note">[\s\S]*?<\/p>\s*/, "");
-    page = page.replace("class=\"category-work-grid\"", "class=\"category-work-grid social-portfolio-grid\"");
+    page = page.replace(/ Profile links are temporary placeholders\./g, "");
 
     await writeFile(pagePath, page, "utf8");
-    console.log(`Built ${category.page} with ${category.links.length} social links.`);
+    console.log(`Built ${pageName} social links.`);
 }
 
 const deployDirectory = resolve(root, "dist");
@@ -113,12 +79,16 @@ await mkdir(deployDirectory, { recursive: true });
 
 const deployFiles = [
     "index.html",
-    ...galleryCategories.map((category) => category.page),
+    ...galleryCategories,
+    ...processPages,
     "style.css",
     "Calist.Pro.png",
+    "CALIST PRO COVER.jpg",
+    "resourses/DSC_5268.jpg",
 ];
 
 for (const filename of deployFiles) {
+    await mkdir(dirname(resolve(deployDirectory, filename)), { recursive: true });
     await cp(resolve(root, filename), resolve(deployDirectory, filename));
 }
 
