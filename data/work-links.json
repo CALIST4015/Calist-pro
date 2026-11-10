@@ -1,0 +1,112 @@
+{
+  "categories": [
+    {
+      "id": "graphics",
+      "title": "Graphics",
+      "service": "Graphic Design",
+      "page": "graphics.html",
+      "items": [
+        {
+          "platform": "Facebook",
+          "url": "https://www.facebook.com/share/18Ys1ejJRb/",
+          "preview": "media-previews/social/graphics-facebook.jpg"
+        },
+        {
+          "platform": "Instagram",
+          "url": "https://www.instagram.com/p/DfiQWhiDsi_/",
+          "preview": "media-previews/social/graphics-instagram.jpg"
+        },
+        {
+          "platform": "TikTok",
+          "url": "https://vt.tiktok.com/ZSpPRW3XY/"
+        },
+        {
+          "platform": "YouTube",
+          "url": "https://youtube.com/post/UgkxVZgDYZVcoiDf0p3uuBCM_0o5nX5K5qs3",
+          "preview": "media-previews/social/graphics-youtube.jpg"
+        }
+      ]
+    },
+    {
+      "id": "photography",
+      "title": "Photography",
+      "service": "Photography",
+      "page": "photography.html",
+      "items": [
+        {
+          "platform": "Facebook",
+          "url": "https://www.facebook.com/share/192aTmoMbv/",
+          "preview": "media-previews/social/photography-facebook.jpg"
+        },
+        {
+          "platform": "Instagram",
+          "url": "https://www.instagram.com/p/DfkFONztT_D/",
+          "preview": "media-previews/social/photography-instagram.jpg"
+        },
+        {
+          "platform": "TikTok",
+          "url": "https://vt.tiktok.com/ZSpPRgD5q/"
+        },
+        {
+          "platform": "YouTube",
+          "url": "https://youtube.com/post/Ugkxfv5k1Jv5t2u98BLvEEaNP7zLk7RoDejJ",
+          "preview": "media-previews/social/photography-youtube.jpg"
+        }
+      ]
+    },
+    {
+      "id": "videography",
+      "title": "Videography",
+      "service": "Videography",
+      "page": "videos.html",
+      "items": [
+        {
+          "platform": "Facebook",
+          "url": "https://www.facebook.com/share/r/1Z8ymWZwMe/",
+          "preview": "media-previews/social/videography-facebook.jpg"
+        },
+        {
+          "platform": "Instagram",
+          "url": "https://www.instagram.com/reel/DfiHZS0tdx5/",
+          "preview": "media-previews/social/videography-instagram.jpg"
+        },
+        {
+          "platform": "TikTok",
+          "url": "https://vt.tiktok.com/ZSpPRK6L5/"
+        },
+        {
+          "platform": "YouTube",
+          "url": "https://youtu.be/_Wszl_bOhrI",
+          "preview": "media-previews/social/videography-youtube.jpg"
+        }
+      ]
+    },
+    {
+      "id": "motion-graphics",
+      "title": "Motion Graphics",
+      "service": "Motion Graphics",
+      "page": "motion-graphics.html",
+      "items": [
+        {
+          "platform": "Facebook",
+          "url": "https://www.facebook.com/share/r/19Mu3ffYg6/",
+          "preview": "media-previews/social/motion-graphics-facebook.jpg"
+        },
+        {
+          "platform": "Instagram",
+          "url": "https://www.instagram.com/reel/DfkF443tyhp/",
+          "preview": "media-previews/social/motion-graphics-instagram.jpg"
+        },
+        {
+          "platform": "TikTok",
+          "url": "https://vt.tiktok.com/ZSpPR4SFa/"
+        },
+        {
+          "platform": "YouTube",
+          "url": "https://youtu.be/_nBCR_eQI_c",
+          "preview": "media-previews/social/motion-graphics-youtube.jpg"
+        }
+      ]
+    }
+  ]
+}

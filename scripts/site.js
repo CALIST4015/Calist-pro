@@ -48,6 +48,12 @@ document.querySelectorAll("img").forEach((image) => {
   image.draggable = false;
 });
 
+document.querySelectorAll(".work-preview-art img").forEach((image) => {
+  const useFallback = () => image.remove();
+  image.addEventListener("error", useFallback, { once: true });
+  if (image.complete && image.naturalWidth === 0) useFallback();
+});
+
 document.querySelectorAll("video").forEach((video) => {
   video.setAttribute("controlsList", "nodownload noplaybackrate");
   video.disablePictureInPicture = true;
@@ -241,68 +247,53 @@ setupPortfolioGallery();
 document.querySelectorAll(".contact-form").forEach((contactForm) => {
   const formStatus = contactForm.querySelector(".form-status");
   const submitButton = contactForm.querySelector('button[type="submit"]');
-  const submitLabel = contactForm.querySelector(".submit-label");
-  const endpoint = contactForm.dataset.endpoint?.trim();
 
-  if (!formStatus || !submitButton || !submitLabel) return;
+  if (!formStatus || !submitButton) return;
 
-  contactForm.addEventListener("submit", async (event) => {
+  contactForm.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!contactForm.reportValidity()) return;
 
-    if (!endpoint) {
-      formStatus.textContent = "Not connected: your inquiry has not been sent. Please contact us by phone or WhatsApp.";
-      formStatus.dataset.state = "error";
-      return;
-    }
+    const name = contactForm.elements.namedItem("name").value.trim();
+    const email = contactForm.elements.namedItem("email").value.trim();
+    const service = contactForm.querySelector('input[name="service"]:checked').value;
+    const timeline = contactForm.elements.namedItem("timeline").value;
+    const message = contactForm.elements.namedItem("message").value.trim();
+    const subject = "CALIST PRO Website Inquiry";
+    const body = [
+      "Hello CALIST PRO,",
+      "",
+      `Name: ${name}`,
+      `Email: ${email}`,
+      `Reply-To: ${email}`,
+      `Service: ${service}`,
+      `Preferred timeline: ${timeline}`,
+      "",
+      "Project message:",
+      message,
+    ].join("\r\n");
+    const mailto = `mailto:cmkisombe@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&Reply-To=${encodeURIComponent(email)}`;
+    const fallbackLink = document.createElement("a");
+    fallbackLink.href = mailto;
+    fallbackLink.textContent = "Open the prefilled email";
 
-    const honeypot = contactForm.elements.namedItem("website");
-    if (honeypot.value.trim()) {
-      formStatus.textContent = "Your inquiry could not be submitted. Please try again.";
-      formStatus.dataset.state = "error";
-      return;
-    }
-
-    submitButton.disabled = true;
-    submitLabel.textContent = "Sending…";
-    contactForm.setAttribute("aria-busy", "true");
-    formStatus.textContent = "Sending your inquiry…";
-    formStatus.dataset.state = "loading";
+    formStatus.replaceChildren(
+      "Your email app should open a message addressed to cmkisombe@gmail.com. Review it and press Send. If it doesn't open, ",
+      fallbackLink,
+      ". Your details will remain in this form.",
+    );
+    formStatus.dataset.state = "info";
 
     try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: contactForm.elements.namedItem("name").value.trim(),
-          email: contactForm.elements.namedItem("email").value.trim(),
-          service: contactForm.querySelector('input[name="service"]:checked').value,
-          timeline: contactForm.elements.namedItem("timeline").value,
-          message: contactForm.elements.namedItem("message").value.trim(),
-          website: honeypot.value.trim(),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`The inquiry service returned ${response.status}.`);
-      }
-
-      const result = await response.json();
-      if (result.success !== true) {
-        throw new Error("The inquiry service did not confirm delivery.");
-      }
-
-      contactForm.reset();
-      formStatus.textContent = "Thank you. Your inquiry has been sent successfully.";
-      formStatus.dataset.state = "success";
+      window.location.href = mailto;
     } catch (error) {
-      console.error("Contact form submission failed:", error);
-      formStatus.textContent = "We couldn't send your inquiry. Your details are still here; please try again.";
+      console.error("Could not open the email composer:", error);
+      formStatus.replaceChildren(
+        "Your email app couldn't be opened. Your details remain in this form; ",
+        fallbackLink,
+        " addressed to cmkisombe@gmail.com. Review the email and press Send.",
+      );
       formStatus.dataset.state = "error";
-    } finally {
-      submitButton.disabled = false;
-      submitLabel.textContent = "Send inquiry";
-      contactForm.removeAttribute("aria-busy");
     }
   });
 });

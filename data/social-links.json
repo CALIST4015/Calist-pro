@@ -1,21 +1,16 @@
 {
   "accounts": [
     {
-      "platform": "YouTube",
-      "url": "https://www.youtube.com/@CALISTPRO"
-    },
-    {
       "platform": "Facebook",
-      "url": "https://web.facebook.com/share/18ZsjLvuex/"
-    },
-    {
-      "platform": "TikTok",
-      "url": "https://www.tiktok.com/@calistproductions?is_from_webapp=1&sender_device=pc"
+      "url": "https://www.facebook.com/Calistproductions"
     },
     {
       "platform": "Instagram",
-      "url": null,
-      "placeholder": "Add the Instagram account URL here when it is available."
+      "url": "https://www.instagram.com/calistproductions/"
+    },
+    {
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CALISTPRO"
     }
   ]
 }

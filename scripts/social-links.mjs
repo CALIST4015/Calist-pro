@@ -18,25 +18,21 @@ const escapeHtml = (value) => value
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 
-if (!Array.isArray(settings.accounts) || settings.accounts.length !== 4) {
-    throw new Error("Social settings must define YouTube, Facebook, TikTok, and Instagram.");
+const officialPlatforms = ["Facebook", "Instagram", "YouTube"];
+if (!Array.isArray(settings.accounts) || settings.accounts.length !== officialPlatforms.length ||
+    officialPlatforms.some((platform) => !settings.accounts.some((account) => account.platform === platform))) {
+    throw new Error("Social settings must define the official YouTube, Facebook, and Instagram pages.");
 }
 
 export const renderSocialLinks = () => `<nav class="brand-social-links" aria-label="CALIST PRO social media">
 ${settings.accounts.map(({ platform, url, placeholder }) => {
     const icon = icons[platform];
     if (!icon) throw new Error(`Missing social icon for ${platform}.`);
-    if (url) {
-        return `              <a class="brand-social-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" aria-label="CALIST PRO on ${escapeHtml(platform)}">
+    if (typeof url !== "string" || !url.startsWith("https://")) {
+        throw new Error(`A valid social link URL is required for ${platform}.`);
+    }
+    return `              <a class="brand-social-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" aria-label="CALIST PRO on ${escapeHtml(platform)}">
                 ${icon}<span>${escapeHtml(platform)}</span>
               </a>`;
-    }
-
-    if (platform !== "Instagram" || !placeholder) {
-        throw new Error(`A social link URL or placeholder is required for ${platform}.`);
-    }
-    return `              <span class="brand-social-link is-unavailable" aria-label="Instagram link coming soon">
-                ${icon}<span>Instagram<small>Coming soon</small></span>
-              </span>`;
 }).join("\n")}
             </nav>`;
