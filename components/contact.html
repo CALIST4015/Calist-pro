@@ -39,14 +39,15 @@
                 </div>
               </div>
               <div class="form-row">
-                <fieldset class="form-field service-options">
-                  <legend>Service required</legend>
+                <fieldset class="form-field service-options" aria-describedby="service-options-error" aria-required="true">
+                  <legend>Service of Interest <span>Select all that apply; choose at least one.</span></legend>
                   <div class="service-options-list">
-                    <label class="service-option"><input type="radio" name="service" value="Photography" required />Photography</label>
-                    <label class="service-option"><input type="radio" name="service" value="Videography" />Videography</label>
-                    <label class="service-option"><input type="radio" name="service" value="Motion Graphics" />Motion Graphics</label>
-                    <label class="service-option"><input type="radio" name="service" value="Graphic Design" />Graphic Design</label>
+                    <label class="service-option"><input type="checkbox" name="service" value="Photography" />Photography</label>
+                    <label class="service-option"><input type="checkbox" name="service" value="Videography" />Videography</label>
+                    <label class="service-option"><input type="checkbox" name="service" value="Motion Graphics" />Motion Graphics</label>
+                    <label class="service-option"><input type="checkbox" name="service" value="Graphic Design" />Graphic Design</label>
                   </div>
+                  <p class="service-options-error" id="service-options-error" role="alert" hidden>Please select at least one service.</p>
                 </fieldset>
                 <div class="form-field">
                   <label for="contact-timeline">Preferred timeline</label>

@@ -6,7 +6,7 @@ import { renderCategoryCardPreview, renderCategoryWork, renderHomeFeaturedWork, 
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const templatePath = resolve(root, "src/index.template.html");
-const componentNames = ["navbar", "hero", "about", "services", "portfolio", "contact", "footer"];
+const componentNames = ["hero", "about", "services", "portfolio", "contact", "footer"];
 const processPages = ["pre-production.html", "production.html", "post-production.html"];
 let html = await readFile(templatePath, "utf8");
 
@@ -131,6 +131,7 @@ await rm(deployDirectory, { recursive: true, force: true });
 await mkdir(deployDirectory, { recursive: true });
 
 const deployFiles = [...new Set([
+    "_headers",
     "index.html",
     ...galleryCategories,
     ...processPages,

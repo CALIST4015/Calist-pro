@@ -136,6 +136,20 @@ img, video { display: block; max-width: 100%; }
   font-style: italic;
   letter-spacing: -.035em;
 }
+.hero-welcome {
+  margin: 12px 0 0;
+  color: #dedbe0;
+  font-size: 11px;
+  letter-spacing: .06em;
+  animation: welcome-entrance 5s cubic-bezier(.2, .65, .3, 1) both;
+}
+@keyframes welcome-entrance {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-welcome { animation: none; }
+}
 .hero-copy { max-width: 420px; margin: 18px 0 0; color: #dedbe0; font-size: 14px; line-height: 1.9; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 28px; margin-top: 32px; }
 .button {
@@ -480,7 +494,8 @@ body.modal-open { overflow: hidden; }
 .service-options legend span { color: #c7c3cb; font-size: 8px; font-weight: 400; letter-spacing: 0; text-transform: none; }
 .service-options-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 10px; }
 .form-field .service-option { display: flex; min-height: 25px; align-items: center; gap: 7px; color: #e1dee4; font-size: 10px; font-weight: 400; letter-spacing: 0; text-transform: none; cursor: pointer; }
-.form-field .service-option input[type="radio"] { width: 15px; height: 15px; flex: 0 0 15px; margin: 0; accent-color: var(--accent-bright); }
+.form-field .service-option input[type="checkbox"] { width: 15px; height: 15px; flex: 0 0 15px; margin: 0; accent-color: var(--accent-bright); }
+.service-options-error { margin: 0; color: #ff9a9a; font-size: 10px; line-height: 1.5; }
 .form-field select:invalid { color: #aaa6af; }
 .form-field select option { color: var(--white); background: var(--night-soft); }
 .form-field input::placeholder, .form-field textarea::placeholder { color: #aaa6af; opacity: 1; }

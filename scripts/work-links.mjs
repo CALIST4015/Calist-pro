@@ -58,7 +58,8 @@ export const renderCategoryCardPreview = (id) => {
 
 export const renderHomeFeaturedWork = () => settings.categories.map((category) => {
     const item = category.items[0];
-    return `            <a class="featured-card featured-card-social" href="${escapeHtml(category.page)}" aria-label="Explore ${escapeHtml(category.title)} in the portfolio">
+    const tiktokItem = category.items.find(({ platform }) => platform === "TikTok");
+    return `            <a class="featured-card featured-card-social" href="${escapeHtml(tiktokItem.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(category.title)} work on TikTok">
               ${renderArt(category, item, "featured-preview-art work-preview-art")}
               <span><span>Featured work</span><strong>${escapeHtml(category.title)}</strong></span>
               <span class="featured-arrow" aria-hidden="true">↗</span>
@@ -68,7 +69,8 @@ export const renderHomeFeaturedWork = () => settings.categories.map((category) =
 export const renderServicePreview = (id) => {
     const category = getCategory(id);
     const item = category.items[0];
-    return `<a class="service-visual service-visual-social work-service-preview" href="${escapeHtml(category.page)}" aria-label="View ${escapeHtml(category.service)} work in the portfolio">
+    const tiktokItem = category.items.find(({ platform }) => platform === "TikTok");
+    return `<a class="service-visual service-visual-social work-service-preview" href="${escapeHtml(tiktokItem.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(category.service)} work on TikTok">
               ${renderArt(category, item)}
               <span class="work-service-label">${escapeHtml(category.service)} <span aria-hidden="true">↗</span></span>
             </a>`;

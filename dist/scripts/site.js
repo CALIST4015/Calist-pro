@@ -247,16 +247,37 @@ setupPortfolioGallery();
 document.querySelectorAll(".contact-form").forEach((contactForm) => {
   const formStatus = contactForm.querySelector(".form-status");
   const submitButton = contactForm.querySelector('button[type="submit"]');
+  const serviceField = contactForm.querySelector(".service-options");
+  const serviceError = contactForm.querySelector("#service-options-error");
+  const serviceInputs = [...contactForm.querySelectorAll('input[name="service"]')];
 
-  if (!formStatus || !submitButton) return;
+  if (!formStatus || !submitButton || !serviceField || !serviceError || serviceInputs.length === 0) return;
+
+  serviceInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      if (serviceInputs.some((option) => option.checked)) {
+        serviceField.removeAttribute("aria-invalid");
+        serviceError.hidden = true;
+      }
+    });
+  });
 
   contactForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    const services = serviceInputs.filter((input) => input.checked).map((input) => input.value);
+    if (services.length === 0) {
+      serviceField.setAttribute("aria-invalid", "true");
+      serviceError.hidden = false;
+      serviceInputs[0].focus();
+      return;
+    }
+
+    serviceField.removeAttribute("aria-invalid");
+    serviceError.hidden = true;
     if (!contactForm.reportValidity()) return;
 
     const name = contactForm.elements.namedItem("name").value.trim();
     const email = contactForm.elements.namedItem("email").value.trim();
-    const service = contactForm.querySelector('input[name="service"]:checked').value;
     const timeline = contactForm.elements.namedItem("timeline").value;
     const message = contactForm.elements.namedItem("message").value.trim();
     const subject = "CALIST PRO Website Inquiry";
@@ -266,7 +287,7 @@ document.querySelectorAll(".contact-form").forEach((contactForm) => {
       `Name: ${name}`,
       `Email: ${email}`,
       `Reply-To: ${email}`,
-      `Service: ${service}`,
+      `Service: ${services.join(", ")}`,
       `Preferred timeline: ${timeline}`,
       "",
       "Project message:",

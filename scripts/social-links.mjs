@@ -18,10 +18,10 @@ const escapeHtml = (value) => value
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 
-const officialPlatforms = ["Facebook", "Instagram", "YouTube"];
+const officialPlatforms = ["Facebook", "Instagram", "TikTok", "YouTube"];
 if (!Array.isArray(settings.accounts) || settings.accounts.length !== officialPlatforms.length ||
     officialPlatforms.some((platform) => !settings.accounts.some((account) => account.platform === platform))) {
-    throw new Error("Social settings must define the official YouTube, Facebook, and Instagram pages.");
+    throw new Error("Social settings must define the official Facebook, Instagram, TikTok, and YouTube pages.");
 }
 
 export const renderSocialLinks = () => `<nav class="brand-social-links" aria-label="CALIST PRO social media">
