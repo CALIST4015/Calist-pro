@@ -46,7 +46,7 @@ const getCategory = (id) => {
 const renderArt = (category, item, className = "work-preview-art") => {
     const preview = item.preview
         ? `<img src="${escapeHtml(item.preview)}" alt="" loading="lazy" decoding="async">`
-        : `<span class="work-preview-fallback-platform">${escapeHtml(item.platform)}</span><strong>${escapeHtml(category.title)}</strong><span class="work-preview-fallback-link">Open on ${escapeHtml(item.platform)} ↗</span>`;
+        : `<span class="work-preview-fallback-platform">${escapeHtml(item.platform)}</span><strong>${escapeHtml(category.title)}</strong><span class="work-preview-fallback-link">Open on ${escapeHtml(item.platform)}</span>`;
     return `<div class="${className}${item.preview ? "" : " work-preview-fallback"}" aria-hidden="true">${preview}</div>`;
 };
 
@@ -62,7 +62,6 @@ export const renderHomeFeaturedWork = () => settings.categories.map((category) =
     return `            <a class="featured-card featured-card-social" href="${escapeHtml(tiktokItem.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(category.title)} work on TikTok">
               ${renderArt(category, item, "featured-preview-art work-preview-art")}
               <span><span>Featured work</span><strong>${escapeHtml(category.title)}</strong></span>
-              <span class="featured-arrow" aria-hidden="true">↗</span>
             </a>`;
 }).join("\n");
 
@@ -72,7 +71,7 @@ export const renderServicePreview = (id) => {
     const tiktokItem = category.items.find(({ platform }) => platform === "TikTok");
     return `<a class="service-visual service-visual-social work-service-preview" href="${escapeHtml(tiktokItem.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(category.service)} work on TikTok">
               ${renderArt(category, item)}
-              <span class="work-service-label">${escapeHtml(category.service)} <span aria-hidden="true">↗</span></span>
+              <span class="work-service-label">${escapeHtml(category.service)}</span>
             </a>`;
 };
 
@@ -84,6 +83,6 @@ export const renderCategoryWork = (id) => {
               </a>
               <p class="social-portfolio-platform">${escapeHtml(item.platform)}</p>
               <h2>${escapeHtml(category.title)} on ${escapeHtml(item.platform)}</h2>
-              <a class="button button-dark work-preview-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Open on ${escapeHtml(item.platform)} <span aria-hidden="true">↗</span></a>
+              <a class="button button-dark work-preview-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Open on ${escapeHtml(item.platform)}</a>
             </article>`).join("\n");
 };

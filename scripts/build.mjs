@@ -6,7 +6,7 @@ import { renderCategoryCardPreview, renderCategoryWork, renderHomeFeaturedWork, 
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const templatePath = resolve(root, "src/index.template.html");
-const componentNames = ["hero", "about", "services", "portfolio", "contact", "footer"];
+const componentNames = ["site-nav", "hero", "about", "services", "portfolio", "contact", "footer"];
 const processPages = ["pre-production.html", "production.html", "post-production.html"];
 let html = await readFile(templatePath, "utf8");
 
@@ -138,6 +138,10 @@ const deployFiles = [...new Set([
     "style.css",
     "Calist.Pro.png",
     "CALIST PRO COVER.jpg",
+    "WhatsApp Image 2026-11-16 at 6.35.26 PM.jpeg",
+    "WhatsApp Image 2026-11-16 at 6.35.58 PM.jpeg",
+    "WhatsApp Image 2026-11-16 at 6.37.12 PM.jpeg",
+    "WhatsApp Image 2026-11-16 at 6.37.45 PM.jpeg",
     "resourses/DSC_5268.jpg",
     ...workPreviewFiles,
 ])];

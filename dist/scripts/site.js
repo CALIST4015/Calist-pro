@@ -54,6 +54,27 @@ document.querySelectorAll(".work-preview-art img").forEach((image) => {
   if (image.complete && image.naturalWidth === 0) useFallback();
 });
 
+document.querySelectorAll("[data-social-carousel]").forEach((carousel) => {
+  const slides = [...carousel.querySelectorAll("[data-social-slide]")];
+  const status = carousel.querySelector("[data-social-status]");
+  const previous = carousel.querySelector("[data-social-previous]");
+  const next = carousel.querySelector("[data-social-next]");
+  let activeIndex = slides.findIndex((slide) => !slide.hidden);
+
+  if (!slides.length || !status || !previous || !next) return;
+
+  const showSlide = (index) => {
+    activeIndex = (index + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => {
+      slide.hidden = slideIndex !== activeIndex;
+    });
+    status.textContent = slides[activeIndex].dataset.socialName;
+  };
+
+  previous.addEventListener("click", () => showSlide(activeIndex - 1));
+  next.addEventListener("click", () => showSlide(activeIndex + 1));
+});
+
 document.querySelectorAll("video").forEach((video) => {
   video.setAttribute("controlsList", "nodownload noplaybackrate");
   video.disablePictureInPicture = true;
